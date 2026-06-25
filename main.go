@@ -1,6 +1,7 @@
 package main
 
 import (
+	"os/exec"
 	"context"
 	"log"
 	"os"
@@ -79,7 +80,7 @@ const (
 	ContactPage
 )
 
-var menuItems = []string{"About", "Projects", "Contact", "Quit"}
+var menuItems = []string{"About", "Projects", "Contact", "Chess", "Quit"}
 
 var projects = []Project{
 	{
@@ -169,6 +170,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				case 2:
 					m.page = ContactPage
 				case 3:
+					return m, launchChess()
+				case 4:
 					return m, tea.Quit
 				}
 			}
@@ -291,6 +294,10 @@ func (m model) contactView() string {
 }
 
 // ─── SSH Server ───────────────────────────────────────────────────────────────
+
+func launchChess() tea.Cmd {
+    return tea.ExecProcess(exec.Command("java", "-jar", "chess game.jar"), nil)
+}
 
 func main() {
 	srv, err := wish.NewServer(
