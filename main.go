@@ -301,7 +301,7 @@ func launchChess() tea.Cmd {
 
 func main() {
 	srv, err := wish.NewServer(
-		wish.WithAddress(":443"), // change to :443 in production (requires root)
+		wish.WithAddress(":2222"), // change to :443 in production (requires root)
 		wish.WithHostKeyPath("/home/martin_fitzgerald1/tui-portfolio/.ssh/id_ed25519"),
 		wish.WithMiddleware(
 			bm.Middleware(func(s ssh.Session) (tea.Model, []tea.ProgramOption) {
