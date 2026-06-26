@@ -316,8 +316,8 @@ func main() {
 	done := make(chan os.Signal, 1)
 	signal.Notify(done, os.Interrupt, syscall.SIGINT, syscall.SIGTERM)
 
-	log.Println("SSH server listening on :2222")
-	log.Println("Connect with: ssh localhost -p 2222")
+	log.Println("SSH server listening on :443")
+	log.Println("Connect with: ssh localhost -p 443")
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil {
