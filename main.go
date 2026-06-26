@@ -18,8 +18,8 @@ import (
 // ─── Styles ──────────────────────────────────────────────────────────────────
 
 var (
-	accent   = lipgloss.Color("#3d3c75")
-	muted    = lipgloss.Color("#6B7280")
+	accent   = lipgloss.Color("#f0a029")
+	muted    = lipgloss.Color("#26b2ca")
 	white    = lipgloss.Color("#F9FAFB")
 	green    = lipgloss.Color("#10B981")
 
@@ -80,30 +80,32 @@ const (
 	ContactPage
 )
 
-var menuItems = []string{"About", "Projects", "Contact", "Chess", "Quit"}
+var menuItems = []string{"About", "Projects", "Contact", "Quit"}
 
 var projects = []Project{
 	{
 		Name:        "Terminal Portfolio",
 		Description: "This website! An SSH-accessible TUI portfolio built with Go, Wish, and Bubble Tea.",
 		Tags:        []string{"Go", "TUI", "SSH"},
-		URL:         "github.com/you/tui-portfolio",
+		URL:         "github.com/martinfitzgerald1-beep/tui-portfolio",
 	},
-{
-    Name:        "ITH correction",
-    Description: `The project proposes a digital self-tuning method to automatically adjust the inductor current threshold
-	 (ITH) in a peak current mode controlled converter. This means the maximum current limit is well defined
-	  and performance is more robust.`,
-    Tags:        []string{"Rust", "CLI"},
-    URL:         "github.com/you/project-two",
-},
 	{
-		Name:        "Project Three",
-		Description: "A brief description of your third project and what makes it interesting.",
-		Tags:        []string{"Python", "API"},
-		URL:         "github.com/you/project-three",
+		Name:        "ITH correction",
+		Description: `The project proposes a digital self-tuning method
+to automatically adjust the inductor current threshold (ITH)
+in a peak current mode controlled converter.
+This means the maximum current limit is well defined
+and performance is more robust.`,
+		Tags:        []string{"RTL", "Verilog", "Virtuoso"},
+		URL:         "github.com/martinfitzgerald1-beep/ith_correction",
 	},
-}
+	{
+		Name:        "Chess",
+		Description: `A Java chess game playable directly in the terminal.`,
+		Tags:        []string{"Java"},
+		URL:         "github.com/martinfitzgerald1-beep/chess",
+	},
+}	
 
 // ─── Model ────────────────────────────────────────────────────────────────────
 
@@ -161,20 +163,18 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 
 		case "enter", " ":
-			if m.page == MenuPage {
-				switch m.cursor {
-				case 0:
-					m.page = AboutPage
-				case 1:
-					m.page = ProjectsPage
-				case 2:
-					m.page = ContactPage
-				case 3:
-					return m, launchChess()
-				case 4:
-					return m, tea.Quit
-				}
-			}
+					if m.page == MenuPage {
+						switch m.cursor {
+						case 0:
+							m.page = AboutPage
+						case 1:
+							m.page = ProjectsPage
+						case 2:
+							m.page = ContactPage
+						case 3:
+							return m, tea.Quit
+						}
+					}
 		}
 	}
 
@@ -197,8 +197,8 @@ func (m model) View() string {
 }
 
 func (m model) menuView() string {
-	header := titleStyle.Render("Your Name") + "\n" +
-		subtitleStyle.Render("Software Engineer · Builder · Human")
+	header := titleStyle.Render("Martin Fitzgerald") + "\n" +
+		subtitleStyle.Render("Engineer · Builder · Human")
 
 	menu := "\n"
 	for i, item := range menuItems {
@@ -222,15 +222,13 @@ func (m model) aboutView() string {
 	content := lipgloss.JoinVertical(lipgloss.Left,
 		titleStyle.Render("About Me"),
 		"",
-		"Hi! I'm a software engineer based in Dublin.",
+		"Hi! I'm an electronic engineer based in Dublin.",
 		"I love building tools, tinkering with systems,",
 		"and apparently making people navigate my portfolio",
 		"through a terminal.",
 		"",
-		"I work primarily with Go, Python, and TypeScript.",
-		"When I'm not coding I'm probably hiking or",
-		"drinking too much coffee.",
-		"",
+		"I am a 4th year electronic engineering student in UCD.",
+		"I have an interest in mixed-signal engineering and software.",
 		dimStyle.Render("esc to go back"),
 	)
 
@@ -283,9 +281,8 @@ func (m model) contactView() string {
 		"",
 		"The best way to reach me:",
 		"",
-		"  Email   "+linkStyle.Render("you@example.com"),
-		"  GitHub  "+linkStyle.Render("github.com/yourusername"),
-		"  Twitter "+linkStyle.Render("@yourhandle"),
+		"  Email   "+linkStyle.Render("martin.fitzgerald1@ucd.ie"),
+		"  GitHub  "+linkStyle.Render("github.com/martinfitzgerald1-beep"),
 		"",
 		dimStyle.Render("esc to go back"),
 	)
@@ -296,7 +293,10 @@ func (m model) contactView() string {
 // ─── SSH Server ───────────────────────────────────────────────────────────────
 
 func launchChess() tea.Cmd {
-    return tea.ExecProcess(exec.Command("java", "-jar", "chess game.jar"), nil)
+    cmd := exec.Command("java", "-jar", "chess_game.jar") // no space in filename
+    return tea.ExecProcess(cmd, func(err error) tea.Msg {
+        return nil
+    })
 }
 
 func main() {
